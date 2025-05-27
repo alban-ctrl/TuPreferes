@@ -1,3 +1,4 @@
+from stockage.py import liste_questions
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
