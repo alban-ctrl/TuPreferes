@@ -1,5 +1,9 @@
+import os
+import json
 from flask import Flask, request, jsonify, render_template
 from random import randint
+
+app = Flask(__name__)
 
 question1 = {"rep1": "avoir un téléphone de la hess", "rep2": "un téléphone qui te vibre dans les fesses"}
 question2 = {"rep1": "Pamplemoussenamaspamousse", "rep2": "Ananazi"}
@@ -49,12 +53,14 @@ question45 = {"rep1": "Timéo", "rep2": "un malien"}
 question46 = {"rep1": "habiter à Roubaix", "rep2": "sucer un roux berbère"}
 question47 = {"rep1": "Booba", "rep2": "Kaaris"}
 question48 = {"rep1": "te promener le paf à l'air", "rep2": "te prendre les griffes de buzz l'éclair"}
+question49 = {"rep1": "la Bar-Mitzvah", "rep2": "le Ramadan"}
 
 liste_questions = []
 
-for i in range(1, 48):
-    question = globals()[f"question{i}"]
-    liste_questions.append(question)
+def creationliste():
+  for i in range(1, 49):
+      question = globals()[f"question{i}"]
+      liste_questions.append(question)
 
 def prendrequestion():
     y = len(liste_questions)
@@ -66,8 +72,17 @@ def prendrequestion():
     liste_questions.pop(x)
     return question, y
 
-prendrequestion()
-
 #if y == 1, alors fin à next
 
-app = Flask(__name__)
+@app.route('/')
+def home():
+    creationliste()
+    return render_template('index.html')
+  
+@app.route('/recupquestion', methods=["POST"])
+def recup_question():
+  questionrenvoyee = prendrequestion()
+  return jsonify({"result": questionrenvoyee})
+
+if __name__ == "__main__":
+    app.run(debug=True)

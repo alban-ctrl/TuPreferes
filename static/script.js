@@ -5,12 +5,16 @@ const btn1 = document.querySelector('#btn1');
 const btn2 = document.querySelector('#btn2');
 const next = document.querySelector('#next');
 const p = document.querySelector("p");
-const h3 = document.querySelector("h3")
+const h3 = document.querySelector("h3");
+const timegg = document.querySelector(".timegg");
+const chargement = document.querySelector(".chargement");
+const fin = document.querySelector(".fin")
 // à ajouter à partir des trucs qu'on aura inshallah
-let reponse1 = "embrasser Charolife";
-let reponse2 = "embrasser ReubeuLove";
-let nbrep1 = 10111;
-let nbrep2 = 101250;
+let reponserecup = null
+let reponse1 = "";
+let reponse2 = "";
+let nbrep1 = 0;
+let nbrep2 = 0;
 let total = nbrep1 + nbrep2;
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
@@ -24,6 +28,26 @@ const intervalChargement = setInterval(() => {
     texteChargement.textContent = 'Chargement' + '.'.repeat(points);
 }, 500);
 
+//pour envoyer les questions
+function envoyerQuestion() {
+  fetch("/recupquestion", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      reponserecup = data.result;
+      reponse1 = reponserecup[0][0]
+      reponse2 = reponserecup[0][1]
+       btn1.textContent = reponse1
+       btn2.textContent = reponse2
+    })
+    .catch(() => {
+      document.getElementById("btn1").textContent = "Erreur serveur.";
+      document.getElementById("btn2").textContent = "Erreur serveur.";
+    });
+}
+
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
 var son = new Audio("../static/assets/sans.wav");
 son.volume = 0.20
@@ -35,8 +59,8 @@ function ecriretexte(nbrep, rep) {
         couleur = "blue"
     };
 
-    let texteDebut = `${nbrep} personnes ont choisies comme vous la réponse "${rep}".`;
-    let texteFin = `${nbrep} personnes ont choisies comme vous la réponse "<span class="${couleur}">${rep}</span>".`;
+    let texteDebut = `${nbrep} personnes ont choisies la réponse "${rep}".`;
+    let texteFin = `${nbrep} personnes ont choisies la réponse "<span class="${couleur}">${rep}</span>".`;
 
     if (i < texteDebut.length) {
         p.innerHTML += texteDebut.charAt(i);
@@ -47,7 +71,7 @@ function ecriretexte(nbrep, rep) {
         }
 
         i += 1
-        ecrireTimeoutId = setTimeout(() => ecriretexte(nbrep, rep), 60);
+        ecrireTimeoutId = setTimeout(() => ecriretexte(nbrep, rep), 50);
     } else {
         p.innerHTML = texteFin;
     };
@@ -82,10 +106,6 @@ function barre() {
     };
 }
 
-
-btn1.textContent = reponse1
-btn2.textContent = reponse2
-
 window.addEventListener("load", () => {
     console.log("Chargé")
     setTimeout(() => {
@@ -98,6 +118,7 @@ window.addEventListener("load", () => {
             chargement.style.display = "none";
         }, 500);
     }, 1000);
+    envoyerQuestion();
 });
 
 btn1.addEventListener("click", () => {
@@ -122,6 +143,16 @@ next.addEventListener("click", () => {
     tupref.style.display = "flex"
     h1.textContent = "TU PRÉFÈRES";
     resultat.style.display = "none";
+    
+    if (reponserecup[1] > 1) {
+        envoyerQuestion();
+    } else{
+        resultat.style.display = "none";
+        tupref.style.display = "none";
+        next.style.display = "none";
+        h1.textContent = "VOUS AVEZ FINI !"
+        fin.style.display = "flex"
+    }
 
     //reset ecriture
     i = 0;
