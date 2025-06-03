@@ -44,10 +44,11 @@ question43 = {"rep1": "les naines", "rep2": "les pieds el Mordjene"}
 question44 = {"rep1": "la mort", "rep2": "tchi tchi"}
 question45 = {"rep1": "Timéo", "rep2": "un malien"}
 question46 = {"rep1": "habiter à Roubaix", "rep2": "sucer un roux berbère"}
+question47 = {"rep1": "Booba", "rep2": "Kaaris"}
 
 liste_questions = []
 
-for i in range(1, 46):
+for i in range(1, 47):
     question = globals()[f"question{i}"]
     liste_questions.append(question)
 
