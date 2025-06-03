@@ -17,7 +17,7 @@ let ecrireTimeoutId = null;
 
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
 var son = new Audio("../static/assets/sans.wav");
-son.volume = 0.10
+son.volume = 0.20
 let i = 0;
 function ecriretexte(nbrep, rep) {
     if (rep == reponse1) {
