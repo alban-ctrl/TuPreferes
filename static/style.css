@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: MartianMono;
-    src: url('../assets/MartianMono-Medium.ttf');
+    src: url('assets/MartianMono-Medium.ttf');
 }
 
 body {
