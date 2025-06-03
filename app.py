@@ -3,10 +3,10 @@ from random import randint
 
 question1 = {"rep1": "avoir un téléphone de la hess", "rep2": "un téléphone qui te vibre dans les fesses"}
 question2 = {"rep1": "Pamplemoussenamaspamousse", "rep2": "Ananazi"}
-question3 = {"rep1": "date RebeuLove", "rep2": "Mathieu Meriot"}
+question3 = {"rep1": "date RebeuLove", "rep2": "date Mathieu Meriot"}
 question4 = {"rep1": "bertrand françois", "rep2": "françois xavier"}
 question5 = {"rep1": "aller au taf", "rep2": "rester sur son paf"}
-question6 = {"rep1": "être un vélociraptor le sang", "rep2": "un tractopelle"}
+question6 = {"rep1": "être un vélociraptor le sang", "rep2": "être un tractopelle"}
 question7 = {"rep1": "Larry le Malicieux", "rep2": "l'électricien"}
 question8 = {"rep1": "avoir l'haleine qui sent la bite", "rep2": "la bite qui sent la laine"}
 question9 = {"rep1": "moi", "rep2": "ton père"}
@@ -20,12 +20,12 @@ question16 = {"rep1": "GMT qui sort le vrai dz", "rep2": "les dz qui ont volé l
 question17 = {"rep1": "parler comme GMK", "rep2": "parler comme Kaydop"}
 question18 = {"rep1": "avoir la classe", "rep2": "avoir la chiasse"}
 question19 = {"rep1": "arrêter la puff pour les paf", "rep2": "arrêter les paf pour les puffs"}
-question20 = {"rep1": "te prendre un pressing tah KLS", "rep2": "une AK dans les fesses"}
+question20 = {"rep1": "te prendre un pressing tah KLS", "rep2": "te prendre une AK dans les fesses"}
 question21 = {"rep1": "être malien", "rep2": "être nazi"}
-question22 = {"rep1": "bz ta femme dans le corps de ta mère", "rep2": "ta mère dans le corps de ta femme"}
+question22 = {"rep1": "bz ta femme dans le corps de ta mère", "rep2": "bz ta mère dans le corps de ta femme"}
 question23 = {"rep1": "t’appeler blocus périphérique", "rep2": "t’appeler Glhynnyl Hylhyr Yzzyghy"}
 question24 = {"rep1": "avoir un pénis de la taille d’un téton", "rep2": "avoir des tétons de la taille d’un pénis"}
-question25 = {"rep1": "ton chat soit rapide comme l’éclair", "rep2": "ton chat soit la réincarnation d’Hitler"}
+question25 = {"rep1": "que ton chat soit rapide comme l’éclair", "rep2": "que ton chat soit la réincarnation d’Hitler"}
 question26 = {"rep1": "toucher l’argent de la CAF", "rep2": "revendre ton caca"}
 question27 = {"rep1": "la chicha à 1 euro", "rep2": "le chichi par un corbeau"}
 question28 = {"rep1": "te faire cambrioler", "rep2": "te faire piller ton village COC par 김정은"}
@@ -56,23 +56,18 @@ for i in range(1, 48):
     question = globals()[f"question{i}"]
     liste_questions.append(question)
 
-app = Flask(__name__)
-
-# Mot de passe en dur
-PASSWORD = "JaiCompris"
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-@app.route("/check-password", methods=["POST"])
-def check_password():
-    data = request.get_json()
-    user_input = data.get("password", "")
-    if user_input == PASSWORD:
-        return jsonify({"result": "Bravo ! Mot de passe correct."})
+def prendrequestion():
+    y = len(liste_questions)
+    if y == 1:
+      x = 0
     else:
-        return jsonify({"result": "Mot de passe incorrect."})
+      x = randint(0,y-1)
+    question = (liste_questions[x].get('rep1'), liste_questions[x].get('rep2'))
+    liste_questions.pop(x)
+    return question, y
 
-if __name__ == "__main__":
-    app.run(debug=True)
+prendrequestion()
+
+#if y == 1, alors fin à next
+
+app = Flask(__name__)
