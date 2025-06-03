@@ -144,7 +144,7 @@ next.addEventListener("click", () => {
     clearTimeout(ecrireTimeoutId);
 
      if (reponserecup[1] > 1) {
-        set Timeout(() => {
+        setTimeout(() => {
         envoyerQuestion();
          }, 500);
         tupref.style.display = "flex";
