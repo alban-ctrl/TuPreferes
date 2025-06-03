@@ -144,9 +144,7 @@ next.addEventListener("click", () => {
     clearTimeout(ecrireTimeoutId);
 
      if (reponserecup[1] > 1) {
-        setTimeout(() => {
         envoyerQuestion();
-         }, 1500);
         tupref.style.display = "flex";
         h1.textContent = "TU PRÉFÈRES";
         resultat.style.display = "none";
