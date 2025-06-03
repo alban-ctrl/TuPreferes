@@ -15,6 +15,15 @@ let total = nbrep1 + nbrep2;
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
 
+//chargement 
+let points = 0;
+timegg.style.animation = "secousses 0.5s infinite"; 
+const texteChargement = document.querySelector('.nombre');
+const intervalChargement = setInterval(() => {
+    points = (points + 1) % 4;
+    texteChargement.textContent = 'Chargement' + '.'.repeat(points);
+}, 500);
+
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
 var son = new Audio("../static/assets/sans.wav");
 son.volume = 0.20
@@ -76,6 +85,20 @@ function barre() {
 
 btn1.textContent = reponse1
 btn2.textContent = reponse2
+
+window.addEventListener("load", () => {
+    console.log("Chargé")
+    setTimeout(() => {
+        clearInterval(intervalChargement);
+        timegg.style.animation = "none";
+
+        chargement.style.opacity = 0;
+
+        setTimeout(() => {
+            chargement.style.display = "none";
+        }, 500);
+    }, 1000);
+});
 
 btn1.addEventListener("click", () => {
     tupref.style.display = "none";
