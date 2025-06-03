@@ -282,6 +282,11 @@ h3 {
 
 @media (max-width: 768px) {
 
+    body {
+        height: 100vh;
+        width: 100vw;
+    }
+    
     h1 {
         font-size: 3em;
     }
