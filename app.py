@@ -42,17 +42,18 @@ question37 = {"rep1": "avoir une queue de cheval", "rep2": "avoir une queue de c
 question38 = {"rep1": "jouer au billard avec tes propres boules", "rep2": "jouer avec mes boules"}
 question39 = {"rep1": "être autiste", "rep2": "être salafiste"}
 question40 = {"rep1": "Gabriel la diablesse", "rep2": "Alvès la duchesse"}
-question41 = {"rep1": "avoir le crâne luisant", "rep2": "le paf saillant"}
+question41 = {"rep1": "avoir le crâne luisant", "rep2": "avoir le paf saillant"}
 question42 = {"rep1": "avoir le menton à Buzz l’Éclair", "rep2": "te faire taillader le crâne chez Zbeubal’Hair"}
 question43 = {"rep1": "les naines", "rep2": "les pieds el Mordjene"}
 question44 = {"rep1": "la mort", "rep2": "tchi tchi"}
 question45 = {"rep1": "Timéo", "rep2": "un malien"}
 question46 = {"rep1": "habiter à Roubaix", "rep2": "sucer un roux berbère"}
 question47 = {"rep1": "Booba", "rep2": "Kaaris"}
+question48 = {"rep1": "te promener le paf à l'air", "rep2": "te prendre les griffes de buzz l'éclair"}
 
 liste_questions = []
 
-for i in range(1, 47):
+for i in range(1, 48):
     question = globals()[f"question{i}"]
     liste_questions.append(question)
 
