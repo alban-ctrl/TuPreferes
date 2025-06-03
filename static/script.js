@@ -16,7 +16,7 @@ let total = nbrep1 + nbrep2;
 let ecrireTimeoutId = null;
 
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
-var son = new Audio("assets/sans.wav");
+var son = new Audio("../assets/sans.wav");
 son.volume = 0.40
 let i = 0;
 function ecriretexte(nbrep, rep) {
