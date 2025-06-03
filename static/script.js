@@ -140,12 +140,14 @@ btn2.addEventListener("click", () => {
 });
 
 next.addEventListener("click", () => {
-    tupref.style.display = "flex"
-    h1.textContent = "TU PRÉFÈRES";
-    resultat.style.display = "none";
-    
-    if (reponserecup[1] > 1) {
+    //stopper celle qui fait du bruit elle clc
+    clearTimeout(ecrireTimeoutId);
+
+     if (reponserecup[1] > 1) {
         envoyerQuestion();
+        tupref.style.display = "flex"
+        h1.textContent = "TU PRÉFÈRES";
+        resultat.style.display = "none";
     } else{
         resultat.style.display = "none";
         tupref.style.display = "none";
@@ -153,7 +155,7 @@ next.addEventListener("click", () => {
         h1.textContent = "VOUS AVEZ FINI !"
         fin.style.display = "flex"
     }
-
+    
     //reset ecriture
     i = 0;
     p.textContent = "";
@@ -165,7 +167,4 @@ next.addEventListener("click", () => {
     barreresultat1.textContent = "0%";
     barreresultat2.style.width = "0%";
     barreresultat2.textContent = "0%";
-
-    //stopper celle qui fait du bruit elle clc
-    clearTimeout(ecrireTimeoutId);
 });
