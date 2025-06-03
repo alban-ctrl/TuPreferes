@@ -279,3 +279,36 @@ h3 {
         transform: rotate(0deg);
     }
 }
+
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 3em;
+    }
+
+    .tupref {
+        height: 80%;
+        width: 90%;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        line-height: 1.4;
+    }
+
+    .next {
+        width: 90%;
+    }
+
+    .resultat {
+        height: 80%;
+    }
+
+    .resultat p {
+        height: 70%;
+    }
+}
