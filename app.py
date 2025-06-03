@@ -1,4 +1,3 @@
-from questions.py import liste_questions
 from flask import Flask, request, jsonify, render_template
 from random import randint
 
