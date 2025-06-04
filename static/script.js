@@ -121,7 +121,6 @@ let progress2 = 0;
 function barre() {
     pourcent1 = Math.round(nbrep1 / total * 100);
     pourcent2 = Math.round(nbrep2 / total * 100);
-    console.log("nbrep1: " + nbrep1+ " nbrep2: " + nbrep2 + " total: "+ total)
     if (progress1 < pourcent1) {
         progress1 = progress1 + 1;
         if (progress1 > pourcent1) {
