@@ -280,19 +280,19 @@ h3 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
 
     h1 {
         font-size: 3em;
     }
 
     .tupref {
-        height: 80%;
-        width: 90%;
+        height: 80vh;
+        width: 90vw;
     }
 
     .btn {
-        width: 100%;
+        width: 90vw;
         font-size: clamp(1.5rem, 2.5vw, 2rem);
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -301,14 +301,15 @@ h3 {
     }
 
     .next {
-        width: 90%;
+        width: 90vw;
     }
 
     .resultat {
-        height: 80%;
+        height: 80vh;
     }
 
     .resultat p {
-        height: 70%;
+        height: 70vh;
     }
 }
+
