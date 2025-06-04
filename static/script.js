@@ -100,10 +100,10 @@ function ecriretexte(nbrep, rep) {
 
     if (i < texteDebut.length) {
         p.innerHTML += texteDebut.charAt(i);
+        son.play();
 
         if (texteDebut.charAt(i).match(/[a-zA-Z0-9]/)) {
             son.currentTime = 0;
-            son.play();
         }
 
         i += 1
