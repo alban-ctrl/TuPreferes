@@ -56,7 +56,7 @@ fetch('/recupjson')
   .then(res => res.json())
   .then(data => {
     if (data.status === "success") {
-      console.log("Json récupréré:", data.data);
+      console.log("Json récupréré");
       votes = data.data;
       loaded += 1
     } else {
