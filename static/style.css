@@ -306,7 +306,7 @@ h3 {
     }
 
     .resultat {
-        height: 100vh;
+        height: 80vh;
     }
 
     .resultat p {
@@ -321,6 +321,6 @@ h3 {
 
     .boitebarre {
         width: 80vw;
-        height: 3vh;
+        height: 5vh;
     }
 }
