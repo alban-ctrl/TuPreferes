@@ -168,6 +168,7 @@ h3 {
 
 .merguez {
     height: auto;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .btn {
@@ -283,7 +284,7 @@ h3 {
 @media (max-width: 800px) {
 
     h1 {
-        font-size: 3em;
+        font-size: 2em;
     }
 
     .tupref {
@@ -305,11 +306,15 @@ h3 {
     }
 
     .resultat {
-        height: 80vh;
+        height: 100vh;
     }
 
     .resultat p {
         height: 70vh;
     }
-}
 
+    .merguez {
+        width: 90vw;
+        font-size: 1.75em;
+    }
+}

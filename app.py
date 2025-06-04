@@ -1,9 +1,9 @@
-import os
+import requests
 import json
 from flask import Flask, request, jsonify, render_template
-from random import randint
 
 app = Flask(__name__)
+nouv_votes = {}
 
 question1 = {"rep1": "avoir un téléphone de la hess", "rep2": "un téléphone qui te vibre dans les fesses"}
 question2 = {"rep1": "Pamplemoussenamaspamousse", "rep2": "Ananazi"}
@@ -57,32 +57,75 @@ question49 = {"rep1": "la Bar-Mitzvah", "rep2": "le Ramadan"}
 
 liste_questions = []
 
-def creationliste():
-  for i in range(1, 49):
-      question = globals()[f"question{i}"]
-      liste_questions.append(question)
+for i in range(1, 49):
+    question = globals()[f"question{i}"]
+    liste_questions.append(question)
 
-def prendrequestion():
-    y = len(liste_questions)
-    if y == 1:
-      x = 0
-    else:
-      x = randint(0,y-1)
-    question = (liste_questions[x].get('rep1'), liste_questions[x].get('rep2'))
-    liste_questions.pop(x)
-    return question, y
+# def prendrequestion():
+#     y = len(liste_questions)
+#     if y == 1:
+#       x = 0
+#     else:
+#       x = randint(0,y-1)
+#     question = (liste_questions[x].get('rep1'), liste_questions[x].get('rep2'))
+#     liste_questions.pop(x)
+#     return question, y
 
 #if y == 1, alors fin à next
 
 @app.route('/')
 def home():
-    creationliste()
     return render_template('index.html')
   
-@app.route('/recupquestion', methods=["POST"])
+#Recup les datas depuis json
+@app.route('/recupjson', methods=["GET"])
+def recupjson():
+    try:
+        response = requests.get("https://683f64c35b39a8039a5483ac.mockapi.io/votes")
+        response.raise_for_status()
+        data = response.json()[0]
+        data = data.get("votes")
+        return jsonify({"status": "success", "data": data})
+    except requests.exceptions.RequestException as e:
+        return jsonify({"status": "error", "message": str(e)})
+  
+#envoyer les questions au js
+@app.route('/recupquestions', methods=["POST"])
 def recup_question():
-  questionrenvoyee = prendrequestion()
-  return jsonify({"result": questionrenvoyee})
+  listerenvoyee = liste_questions
+  return jsonify({"result": listerenvoyee})
+
+#envoyer les votes de js à python puis json
+@app.route('/envoyer_reponses', methods=["POST"])
+def recevoir_reponses():
+    try:
+        data = request.get_json()
+        nouv_votes = data
+        #Recup anciens vote
+        response = requests.get("https://683f64c35b39a8039a5483ac.mockapi.io/votes")
+        old_votes_list = response.json()
+        old_votes = old_votes_list[0]
+        
+        print("nouv_votes reçus :", nouv_votes)
+        print("votes existants :", old_votes.get("votes"))
+        
+        #fusionner
+        for key, value in nouv_votes.items():
+          old_votes["votes"][key] = old_votes["votes"].get(key, 0) + value
+          
+        print("fusion = ", old_votes)
+        updated_payload = {"votes": old_votes["votes"]}
+        put_url = f"https://683f64c35b39a8039a5483ac.mockapi.io/votes/1"
+        put_response = requests.put(put_url, json=updated_payload)
+        if put_response.status_code not in [200, 201]:
+            return jsonify({"error": "Échec de mise à jour MockAPI", "vote renvoyés":old_votes}), 500
+
+        return jsonify({"message": "Votes fusionnés et mis à jour avec succès", "updated_data": old_votes})
+          
+        
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+      
 
 if __name__ == "__main__":
     app.run(debug=True)

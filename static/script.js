@@ -8,14 +8,20 @@ const p = document.querySelector("p");
 const h3 = document.querySelector("h3");
 const timegg = document.querySelector(".timegg");
 const chargement = document.querySelector(".chargement");
-const fin = document.querySelector(".fin")
+const fin = document.querySelector(".fin");
+let loaded = 0
+// nouveau votes
+let nouv_vote = {};
 // à ajouter à partir des trucs qu'on aura inshallah
-let reponserecup = null
+let total = 0
+let pourcent1 = 0
+let pourcent2 = 0
+let reponserecup = null;
 let reponse1 = "";
 let reponse2 = "";
 let nbrep1 = 0;
 let nbrep2 = 0;
-let total = nbrep1 + nbrep2;
+let y = 0
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
 
@@ -28,25 +34,55 @@ const intervalChargement = setInterval(() => {
     texteChargement.textContent = 'Chargement' + '.'.repeat(points);
 }, 500);
 
-//pour envoyer les questions
-function envoyerQuestion() {
-  fetch("/recupquestion", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+//pour récup les questions
+fetch("/recupquestions", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      reponserecup = data.result;
-      reponse1 = reponserecup[0][0]
-      reponse2 = reponserecup[0][1]
-       btn1.textContent = reponse1
-       btn2.textContent = reponse2
-    })
-    .catch(() => {
-      document.getElementById("btn1").textContent = "Erreur serveur.";
-      document.getElementById("btn2").textContent = "Erreur serveur.";
-    });
+.then((response) => response.json())
+.then((data) => {
+  liste_questions = data.result;
+  console.log(liste_questions)
+  console.log('Liste chargée')
+  loaded += 1
+})
+.catch(() => {
+  document.getElementById("btn1").textContent = "Erreur serveur.";
+  document.getElementById("btn2").textContent = "Veuillez raffraichir la page.";
+});
+
+//récup les votes
+fetch('/recupjson')
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      console.log("Json récupréré:", data.data);
+      votes = data.data;
+      loaded += 1
+    } else {
+      console.error("Erreur MockAPI:", data.message);
+    }
+  });
+
+
+//envoyer les questions
+function envoyerquestion() {
+    y = liste_questions.length
+    if (y == 1) {
+        x = 0
+    } else  {
+        x = Math.floor(Math.random() * y)
+    }
+    let question = [liste_questions[x]["rep1"], liste_questions[x]["rep2"]];
+    liste_questions.splice(x, 1)
+
+    // mettre les questions dans le bail
+    reponse1 = question[0]
+    reponse2 = question[1]
+    btn1.textContent = reponse1
+    btn2.textContent = reponse2
 }
+
 
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
 var son = new Audio("../static/assets/sans.wav");
@@ -82,9 +118,10 @@ let barreresultat1 = document.querySelector("#resultat1");
 let barreresultat2 = document.querySelector("#resultat2");
 let progress1 = 0;
 let progress2 = 0;
-let pourcent1 = Math.round(nbrep1 / total * 100)
-let pourcent2 = Math.round(nbrep2 / total * 100)
 function barre() {
+    pourcent1 = Math.round(nbrep1 / total * 100);
+    pourcent2 = Math.round(nbrep2 / total * 100);
+    console.log("nbrep1: " + nbrep1+ " nbrep2: " + nbrep2 + " total: "+ total)
     if (progress1 < pourcent1) {
         progress1 = progress1 + 1;
         if (progress1 > pourcent1) {
@@ -106,35 +143,68 @@ function barre() {
     };
 }
 
+function envoyervotes() {
+    console.log(nouv_vote)
+    fetch("/envoyer_reponses", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(nouv_vote),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch(() => {
+      console.log("Erreur serveur.");
+    });
+
+}
+
 window.addEventListener("load", () => {
-    console.log("Chargé")
-    setTimeout(() => {
-        clearInterval(intervalChargement);
-        timegg.style.animation = "none";
+    console.log("assets Chargé");
 
-        chargement.style.opacity = 0;
+    const intervalChargement = setInterval(() => {
+        if (loaded === 2) {
+            clearInterval(intervalChargement);
 
-        setTimeout(() => {
-            chargement.style.display = "none";
-        }, 500);
-    }, 1000);
-    envoyerQuestion();
+            timegg.style.animation = "none";
+
+            setTimeout(() => {
+                chargement.style.opacity = 0;
+
+                setTimeout(() => {
+                    chargement.style.display = "none";
+                }, 500);
+            }, 300);
+
+            envoyerquestion();
+        }
+    }, 100);
 });
 
+
 btn1.addEventListener("click", () => {
+    nbrep1 = votes[reponse1];
+    nbrep2 = votes[reponse2];
+    total = nbrep1 + nbrep2;
     tupref.style.display = "none";
     h1.textContent = "RÉSULTAT";
     resultat.style.display = "flex";
     h3.textContent = total + " réponses au total";
+    nouv_vote[reponse1] = 1
     ecriretexte(nbrep1, reponse1);
     barre();
 });
 
 btn2.addEventListener("click", () => {
+    nbrep1 = votes[reponse1];
+    nbrep2 = votes[reponse2];
+    total = nbrep1 + nbrep2;
     tupref.style.display = "none";
     h1.textContent = "RÉSULTAT";
     resultat.style.display = "flex";
     h3.textContent = total + " réponses au total";
+    nouv_vote[reponse2] = 1
     ecriretexte(nbrep2, reponse2);
     barre();
 });
@@ -143,8 +213,8 @@ next.addEventListener("click", () => {
     //stopper celle qui fait du bruit elle clc
     clearTimeout(ecrireTimeoutId);
 
-     if (reponserecup[1] > 1) {
-        envoyerQuestion();
+     if (y > 1) {
+        envoyerquestion();
         tupref.style.display = "flex";
         h1.textContent = "TU PRÉFÈRES";
         resultat.style.display = "none";
@@ -154,6 +224,7 @@ next.addEventListener("click", () => {
         next.style.display = "none";
         h1.textContent = "VOUS AVEZ FINI !";
         fin.style.display = "flex";
+        console.log(nouv_vote)
     }
     
     //reset ecriture
@@ -167,4 +238,10 @@ next.addEventListener("click", () => {
     barreresultat1.textContent = "0%";
     barreresultat2.style.width = "0%";
     barreresultat2.textContent = "0%";
+});
+
+addEventListener("beforeunload", () => {
+    if (Object.keys(nouv_vote).length > 0) {
+        envoyervotes();
+}
 });
