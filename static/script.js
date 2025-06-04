@@ -113,6 +113,15 @@ function ecriretexte(nbrep, rep) {
     };
 }
 
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Enlever le son sur tel puisque ça marche po
+if (isMobile()) {
+  son.volume = 0.20
+}
+
 //Ptite barre de progression tah les oufs
 let barreresultat1 = document.querySelector("#resultat1");
 let barreresultat2 = document.querySelector("#resultat2");
