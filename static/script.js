@@ -119,7 +119,7 @@ function isMobile() {
 
 // Enlever le son sur tel puisque ça marche po
 if (isMobile()) {
-  son.volume = 0.20
+  son.volume = 0
 }
 
 //Ptite barre de progression tah les oufs
