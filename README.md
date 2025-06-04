@@ -28,3 +28,11 @@ bash :
 	source env/bin/activate  # Windows : env\Scripts\activate
 	pip install -r requirements.txt
 	python app.py
+
+---
+
+## lien pour le stockage
+
+---
+
+https://683f64c35b39a8039a5483ac.mockapi.io/votes
