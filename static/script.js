@@ -24,6 +24,7 @@ let nbrep2 = 0;
 let y = 0
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
+let barreIntervalId = null;
 
 //chargement 
 let points = 0;
@@ -113,42 +114,47 @@ function ecriretexte(nbrep, rep) {
     };
 }
 
-function isMobile() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
-// Enlever le son sur tel puisque ça marche po
-if (isMobile()) {
-  son.volume = 0
-}
-
+//Ptite barre de progression tah les oufs
 //Ptite barre de progression tah les oufs
 let barreresultat1 = document.querySelector("#resultat1");
 let barreresultat2 = document.querySelector("#resultat2");
 let progress1 = 0;
 let progress2 = 0;
+
 function barre() {
+    // Calcul des pourcentages
     pourcent1 = Math.round(nbrep1 / total * 100);
     pourcent2 = Math.round(nbrep2 / total * 100);
-    if (progress1 < pourcent1) {
-        progress1 = progress1 + 1;
-        if (progress1 > pourcent1) {
-            progress1 = pourcent1;
-        }
-        barreresultat1.style.width = progress1 + "%";
-        barreresultat1.textContent = progress1 + "%";
-        setTimeout(barre, 100);
-    };
 
-    if (progress2 < pourcent2) {
-        progress2 = progress2 + 1;
-        if (progress2 > pourcent2) {
-            progress2 = pourcent2
+    // Nettoie d'abord tout interval précédent
+    clearInterval(barreIntervalId);
+
+    // Nouvelle boucle pour animer les deux barres en même temps
+    barreIntervalId = setInterval(() => {
+        let done1 = false;
+        let done2 = false;
+
+        if (progress1 < pourcent1) {
+            progress1 += 1;
+            barreresultat1.style.width = progress1 + "%";
+            barreresultat1.textContent = progress1 + "%";
+        } else {
+            done1 = true;
         }
-        barreresultat2.style.width = progress2 + "%";
-        barreresultat2.textContent = progress2 + "%";
-        setTimeout(barre, 100)
-    };
+
+        if (progress2 < pourcent2) {
+            progress2 += 1;
+            barreresultat2.style.width = progress2 + "%";
+            barreresultat2.textContent = progress2 + "%";
+        } else {
+            done2 = true;
+        }
+
+        // Quand les deux sont terminées, on arrête l’intervalle
+        if (done1 && done2) {
+            clearInterval(barreIntervalId);
+        }
+    }, 20); // Plus fluide que 100ms
 }
 
 function envoyervotes() {
@@ -220,6 +226,7 @@ btn2.addEventListener("click", () => {
 next.addEventListener("click", () => {
     //stopper celle qui fait du bruit elle clc
     clearTimeout(ecrireTimeoutId);
+    clearTimeout(barreTimeoutId);
 
      if (y > 1) {
         envoyerquestion();
@@ -232,7 +239,6 @@ next.addEventListener("click", () => {
         next.style.display = "none";
         h1.textContent = "VOUS AVEZ FINI !";
         fin.style.display = "flex";
-        console.log(nouv_vote)
     }
     
     //reset ecriture
