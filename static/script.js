@@ -226,7 +226,7 @@ btn2.addEventListener("click", () => {
 next.addEventListener("click", () => {
     //stopper celle qui fait du bruit elle clc
     clearTimeout(ecrireTimeoutId);
-    clearTimeout(barreTimeoutId);
+    clearInterval(barreIntervalId);
 
      if (y > 1) {
         envoyerquestion();
