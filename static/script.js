@@ -9,19 +9,20 @@ const h3 = document.querySelector("h3");
 const timegg = document.querySelector(".timegg");
 const chargement = document.querySelector(".chargement");
 const fin = document.querySelector(".fin");
-let loaded = 0
+let loaded = 0;
+let reponseenvoyee = false;
 // nouveau votes
 let nouv_vote = {};
 // à ajouter à partir des trucs qu'on aura inshallah
-let total = 0
-let pourcent1 = 0
-let pourcent2 = 0
+let total = 0;
+let pourcent1 = 0;
+let pourcent2 = 0;
 let reponserecup = null;
 let reponse1 = "";
 let reponse2 = "";
 let nbrep1 = 0;
 let nbrep2 = 0;
-let y = 0
+let y = 0;
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
 let barreIntervalId = null;
@@ -262,7 +263,20 @@ btn2.addEventListener("click", () => {
 next.addEventListener("click", () => {
     //stopper celle qui fait du bruit elle clc
     clearTimeout(ecrireTimeoutId);
+
+        
+    //reset ecriture
+    i = 0;
+    p.textContent = "";
+
+    //reset barre
     clearInterval(barreIntervalId);
+    progress1 = 0;
+    progress2 = 0;
+    barreresultat1.style.width = "0%";
+    barreresultat1.textContent = "0%";
+    barreresultat2.style.width = "0%";
+    barreresultat2.textContent = "0%";
 
      if (y > 1) {
         envoyerquestion();
@@ -275,23 +289,17 @@ next.addEventListener("click", () => {
         next.style.display = "none";
         h1.textContent = "VOUS AVEZ FINI !";
         fin.style.display = "flex";
-    }
-    
-    //reset ecriture
-    i = 0;
-    p.textContent = "";
-
-    //reset barre
-    progress1 = 0;
-    progress2 = 0;
-    barreresultat1.style.width = "0%";
-    barreresultat1.textContent = "0%";
-    barreresultat2.style.width = "0%";
-    barreresultat2.textContent = "0%";
+        console.log(nouv_vote)
+        if (Object.keys(nouv_vote).length > 0) {
+        envoyervotes();
+        reponseenvoyee = true
+    };
+  };
 });
 
+
 addEventListener("beforeunload", () => {
-    if (Object.keys(nouv_vote).length > 0) {
+    if (Object.keys(nouv_vote).length > 0 && reponseenvoyee === false) {
         envoyervotes();
 }
 });
