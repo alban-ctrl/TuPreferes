@@ -25,6 +25,10 @@ let y = 0
 // pour stopper le satanée fonction
 let ecrireTimeoutId = null;
 let barreIntervalId = null;
+// musique
+let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let buffer = null;
+let currentSource = null; // pour le son en cours
 
 //chargement 
 let points = 0;
@@ -34,6 +38,14 @@ const intervalChargement = setInterval(() => {
     points = (points + 1) % 4;
     texteChargement.textContent = 'Chargement' + '.'.repeat(points);
 }, 500);
+
+//recup le son
+fetch("static/assets/sans.wav")
+  .then(response => response.arrayBuffer())
+  .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+  .then(decodedAudio => {
+    buffer = decodedAudio;
+  });
 
 //pour récup les questions
 fetch("/recupquestions", {
@@ -84,10 +96,27 @@ function envoyerquestion() {
     btn2.textContent = reponse2
 }
 
+//jouer le son
+function jouerSon() {
+  if (buffer) {
+    // Stoppe le son precedent s'il est en cours
+    if (currentSource) {
+      try {
+        currentSource.stop();
+      } catch (e) {
+        // ignore erreurs
+      }
+    }
+
+    // Crée une nouvelle source
+    currentSource = audioContext.createBufferSource();
+    currentSource.buffer = buffer;
+    currentSource.connect(audioContext.destination);
+    currentSource.start(0);
+  }
+}
 
 //fonction pour que le texte fasse du bruit et tout paw paw zbrrra + couleuuuuuuuuuuuurerrr
-var son = new Audio("../static/assets/sans.mp3");
-son.volume = 0.20
 let i = 0;
 function ecriretexte(nbrep, rep) {
     if (rep == reponse1) {
@@ -101,10 +130,9 @@ function ecriretexte(nbrep, rep) {
 
     if (i < texteDebut.length) {
         p.innerHTML += texteDebut.charAt(i);
-        son.play();
 
         if (texteDebut.charAt(i).match(/[a-zA-Z0-9]/)) {
-            son.currentTime = 0;
+            jouerSon();
         }
 
         i += 1
@@ -196,6 +224,14 @@ window.addEventListener("load", () => {
     }, 100);
 });
 
+window.addEventListener("click", () => {
+  // iOS : le son ne peut être activé qu’après une interaction utilisateur
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().then(() => {
+      console.log("Contexte audio activé !");
+    });
+  }
+}, { once: true });
 
 btn1.addEventListener("click", () => {
     nbrep1 = votes[reponse1];
