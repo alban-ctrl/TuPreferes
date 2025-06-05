@@ -8,7 +8,7 @@ nouv_votes = {}
 question1 = {"rep1": "avoir un téléphone de la hess", "rep2": "un téléphone qui te vibre dans les fesses"}
 question2 = {"rep1": "Pamplemoussenamaspamousse", "rep2": "Ananazi"}
 question3 = {"rep1": "date RebeuLove", "rep2": "date Mathieu Meriot"}
-question4 = {"rep1": "bertrand françois", "rep2": "françois xavier"}
+question4 = {"rep1": "Zidane", "rep2": "un zizi d'âne"}
 question5 = {"rep1": "aller au taf", "rep2": "rester sur son paf"}
 question6 = {"rep1": "être un vélociraptor le sang", "rep2": "être un tractopelle"}
 question7 = {"rep1": "Larry le Malicieux", "rep2": "l'électricien"}
@@ -57,20 +57,9 @@ question49 = {"rep1": "la Bar-Mitzvah", "rep2": "le Ramadan"}
 
 liste_questions = []
 
-for i in range(1, 49):
+for i in range(1, 50):
     question = globals()[f"question{i}"]
     liste_questions.append(question)
-
-# def prendrequestion():
-#     y = len(liste_questions)
-#     if y == 1:
-#       x = 0
-#     else:
-#       x = randint(0,y-1)
-#     question = (liste_questions[x].get('rep1'), liste_questions[x].get('rep2'))
-#     liste_questions.pop(x)
-#     return question, y
-
 #if y == 1, alors fin à next
 
 @app.route('/')
