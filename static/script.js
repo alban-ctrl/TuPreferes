@@ -40,7 +40,7 @@ const intervalChargement = setInterval(() => {
 }, 500);
 
 //recup le son
-fetch("static/assets/sans.wav")
+fetch("static/assets/sans.mp3")
   .then(response => response.arrayBuffer())
   .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
   .then(decodedAudio => {
